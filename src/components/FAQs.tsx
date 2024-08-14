@@ -1,3 +1,9 @@
+"use client";
+import React from "react";
+import PlusIcon from "../assets/icons/plus.svg";
+import MinusIcon from "../assets/icons/minus.svg";
+import { AnimatePresence, motion } from "framer-motion";
+
 const items = [
   {
     question: "What payment methods do you accept?",
@@ -21,6 +27,51 @@ const items = [
   },
 ];
 
+const AccordianItem = ({
+  question,
+  answer,
+}: {
+  question: string;
+  answer: string;
+}) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  return (
+    <div
+      className="py-7 border-b border-white/30 cursor-pointer"
+      onClick={() => setIsOpen((p) => !p)}
+    >
+      <div className="flex items-center">
+        <span className="flex-1 text-lg font-bold">{question}</span>
+        {isOpen ? <MinusIcon /> : <PlusIcon />}
+      </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: "auto", marginTop: "16px" }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+          >
+            {answer}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 export const FAQs = () => {
-  return null;
+  return (
+    <div className="bg-black text-white bg-gradient-to-b to-black from-[#5D2CA8] py-[72px] sm:py-24">
+      <div className="container">
+        <h2 className="text-center text-5xl sm:text-6xl sm:max-w-[648px] mx-auto font-bold tracking-tighter">
+          Frequently asked questions
+        </h2>
+        <div className="mt-12 max-w-[648px] mx-auto">
+          {items.map(({ question, answer }, idxx) => (
+            <AccordianItem question={question} answer={answer} key={idxx} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 };
